@@ -1,38 +1,23 @@
-.App {
-  text-align: center;
+/* App.css */
+
+.shirt-preview {
+  position: relative;
+  background-color: #ffffff; /* Fallback color if image fails to load */
+  width: 300px; /* Width that matches your t-shirt image */
+  height: 400px; /* Height that matches your t-shirt image */
+  margin: 0 auto; /* Center the t-shirt preview */
+  border: 2px solid #ccc; /* Optional border */
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+/* Uploaded image */
+.uploaded-image {
+  position: absolute;
+  cursor: grab;
+  background-position: center;
+  background-size: contain; /* Ensure uploaded image scales correctly */
+  background-repeat: no-repeat; /* Prevent repeating uploaded image */
 }
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.uploaded-text {
+  transition: all 0.1s; /* Optional: smooth transition for text */
+  font-weight: bold; /* Optional: make the text bold */
 }
