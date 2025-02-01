@@ -110,9 +110,26 @@ export default function CustomizeShirt() {
 
     setUploading(true);
 
+    // Convert Base64 to File
+    const base64ToFile = (base64, filename) => {
+        let arr = base64.split(',');
+        let mime = arr[0].match(/:(.*?);/)[1];
+        let bstr = atob(arr[1]);
+        let n = bstr.length;
+        let u8arr = new Uint8Array(n);
+        while (n--) {
+            u8arr[n] = bstr.charCodeAt(n);
+        }
+        return new File([u8arr], filename, { type: mime });
+    };
+
+    // Convert both images to File
+    const frontImageFile = base64ToFile(frontDesign.image, "front_design.png");
+    const backImageFile = base64ToFile(backDesign.image, "back_design.png");
+
     const formData = new FormData();
-    formData.append("images", frontDesign.image);  // Match backend field name
-    formData.append("images", backDesign.image);   // Send as an array
+    formData.append("images", frontImageFile);  // Match backend field name
+    formData.append("images", backImageFile);   // Send as an array
 
     try {
         const response = await axios.post("http://localhost:5001/api/upload", formData, {
