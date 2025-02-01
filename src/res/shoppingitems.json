@@ -1,0 +1,42 @@
+[
+    {
+        "id": 1,
+        "name": "Vintage Denim Jacket",
+        "price": 79.99,
+        "category": "Clothing",
+        "image": "images/denim_jacket.jpg",
+        "description": "A stylish vintage denim jacket perfect for any casual outfit."
+    },
+    {
+        "id": 2,
+        "name": "Leather Handbag",
+        "price": 149.99,
+        "category": "Accessories",
+        "image": "images/leather_handbag.jpg",
+        "description": "A premium leather handbag that adds a touch of elegance to your look."
+    },
+    {
+        "id": 3,
+        "name": "Running Sneakers",
+        "price": 89.99,
+        "category": "Footwear",
+        "image": "images/running_sneakers.jpg",
+        "description": "Comfortable and stylish running sneakers for your daily workouts."
+    },
+    {
+        "id": 4,
+        "name": "Graphic T-Shirt",
+        "price": 29.99,
+        "category": "Clothing",
+        "image": "images/graphic_tshirt.jpg",
+        "description": "A trendy graphic t-shirt that makes a bold statement."
+    },
+    {
+        "id": 5,
+        "name": "Sunglasses",
+        "price": 19.99,
+        "category": "Accessories",
+        "image": "images/sunglasses.jpg",
+        "description": "Stylish sunglasses to protect your eyes and enhance your look."
+    }
+]
