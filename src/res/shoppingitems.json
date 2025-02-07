@@ -1,42 +1,42 @@
 [
-    {
-        "id": 1,
-        "name": "Vintage Denim Jacket",
-        "price": 79.99,
-        "category": "Clothing",
-        "image": "images/denim_jacket.jpg",
-        "description": "A stylish vintage denim jacket perfect for any casual outfit."
-    },
-    {
-        "id": 2,
-        "name": "Leather Handbag",
-        "price": 149.99,
-        "category": "Accessories",
-        "image": "images/leather_handbag.jpg",
-        "description": "A premium leather handbag that adds a touch of elegance to your look."
-    },
-    {
-        "id": 3,
-        "name": "Running Sneakers",
-        "price": 89.99,
-        "category": "Footwear",
-        "image": "images/running_sneakers.jpg",
-        "description": "Comfortable and stylish running sneakers for your daily workouts."
-    },
-    {
-        "id": 4,
-        "name": "Graphic T-Shirt",
-        "price": 29.99,
-        "category": "Clothing",
-        "image": "images/graphic_tshirt.jpg",
-        "description": "A trendy graphic t-shirt that makes a bold statement."
-    },
-    {
-        "id": 5,
-        "name": "Sunglasses",
-        "price": 19.99,
-        "category": "Accessories",
-        "image": "images/sunglasses.jpg",
-        "description": "Stylish sunglasses to protect your eyes and enhance your look."
-    }
+  {
+    "id": 1,
+    "name": "Vintage Denim Jacket",
+    "price": 79.99,
+    "category": "Clothing",
+    "image": "https://m.media-amazon.com/images/I/61k5qx9dsxL._AC_UF456,576_SR456,576_.jpg",
+    "description": "A stylish vintage denim jacket perfect for any casual outfit."
+  },
+  {
+    "id": 2,
+    "name": "Leather Handbag",
+    "price": 149.99,
+    "category": "Accessories",
+    "image": "https://m.media-amazon.com/images/I/61NwgA3OgfL._AC_SX385_.jpg",
+    "description": "A premium leather handbag that adds a touch of elegance to your look."
+  },
+  {
+    "id": 3,
+    "name": "Running Sneakers",
+    "price": 89.99,
+    "category": "Footwear",
+    "image": "https://images-na.ssl-images-amazon.com/images/I/81rHcvd-57L._AC_UL232_SR232,232_.jpg",
+    "description": "Comfortable and stylish running sneakers for your daily workouts."
+  },
+  {
+    "id": 4,
+    "name": "Graphic T-Shirt",
+    "price": 29.99,
+    "category": "Clothing",
+    "image": "https://m.media-amazon.com/images/I/71rk8JqZZTL._AC_UF456,576_SR456,576_.jpg",
+    "description": "A trendy graphic t-shirt that makes a bold statement."
+  },
+  {
+    "id": 5,
+    "name": "Sunglasses",
+    "price": 19.99,
+    "category": "Accessories",
+    "image": "https://m.media-amazon.com/images/I/61vNP+rSAPL._AC_UF456,576_SR456,576_.jpg",
+    "description": "Stylish sunglasses to protect your eyes and enhance your look."
+  }
 ]
