@@ -1,15 +1,19 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useCart } from "../context/CartContext";
 import { FaShoppingCart } from "react-icons/fa";
 import Checkout from "../Checkout";
 
 const Cart = () => {
-  const { cartItems, removeFromCart } = useCart();
+  const { cartItems, removeFromCart, increaseQuantity, decreaseQuantity } =
+    useCart();
   const [isOpen, setIsOpen] = useState(false);
   const [checkout, setCheckout] = useState(false);
 
-  // Calculate total dynamically
-  const total = cartItems.reduce((acc, item) => acc + item.price, 0);
+  // Calculate total dynamically (based on quantity)
+  const total = cartItems.reduce(
+    (acc, item) => acc + item.price * item.quantity,
+    0
+  );
 
   return (
     <div className="container mt-4">
@@ -19,7 +23,7 @@ const Cart = () => {
         onClick={() => setIsOpen(!isOpen)}
       >
         <FaShoppingCart size={24} className="me-2" />
-        Cart ({cartItems.length})
+        Cart ({cartItems.reduce((acc, item) => acc + item.quantity, 0)})
       </button>
 
       {/* Cart Items Section */}
@@ -50,6 +54,26 @@ const Cart = () => {
                       />
                     )}
                   </div>
+
+                  {/* Quantity Controls */}
+                  <div className="d-flex align-items-center">
+                    <button
+                      className="btn btn-sm btn-outline-secondary"
+                      onClick={() => decreaseQuantity(item.id)}
+                      disabled={item.quantity <= 1}
+                    >
+                      -
+                    </button>
+                    <span className="mx-2">{item.quantity}</span>
+                    <button
+                      className="btn btn-sm btn-outline-primary"
+                      onClick={() => increaseQuantity(item.id)}
+                    >
+                      +
+                    </button>
+                  </div>
+
+                  {/* Remove Button */}
                   <button
                     className="btn btn-sm btn-danger"
                     onClick={() => removeFromCart(item.id)}

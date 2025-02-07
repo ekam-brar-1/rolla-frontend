@@ -6,7 +6,31 @@ export default function Checkout() {
   const { cartItems } = useCart();
 
   // Calculate total price
-  const total = cartItems.reduce((acc, item) => acc + item.price, 0);
+  const total = cartItems.reduce(
+    (acc, item) => acc + item.price * item.quantity,
+    0
+  );
+  const handleCheckout = async () => {
+    try {
+      const response = await fetch("http://localhost:5001/api/checkout", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ cartItems, total }),
+      });
+
+      const data = await response.json();
+      if (response.ok) {
+        alert("Order placed successfully!");
+      } else {
+        alert("Error placing order: " + data.message);
+      }
+    } catch (error) {
+      console.error("Checkout error:", error);
+      alert("An error occurred during checkout.");
+    }
+  };
 
   return (
     <div className="container" id="Checkout">
@@ -33,12 +57,16 @@ export default function Checkout() {
                   className="list-group-item d-flex justify-content-between lh-condensed"
                 >
                   <div>
-                    <h6 className="my-0">{item.name}</h6>
+                    <h6 className="my-0">
+                      {item.name} (x{item.quantity})
+                    </h6>
                     <small className="text-muted">
                       {item.description || ""}
                     </small>
                   </div>
-                  <span className="text-muted">${item.price.toFixed(2)}</span>
+                  <span className="text-muted">
+                    ${(item.price * item.quantity).toFixed(2)}
+                  </span>
                 </li>
               ))
             )}
@@ -164,7 +192,11 @@ export default function Checkout() {
               </div>
             </div>
 
-            <button className="btn btn-primary btn-lg btn-block" type="submit">
+            <button
+              className="btn btn-primary btn-lg btn-block"
+              type="button"
+              onClick={handleCheckout}
+            >
               Continue to checkout
             </button>
           </form>
