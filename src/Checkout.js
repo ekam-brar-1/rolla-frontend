@@ -1,28 +1,107 @@
-import React from "react";
+import React, { useState, useContext } from "react";
 import { useCart } from "./context/CartContext";
-import Header from "./Header";
+import { AuthContext } from "./context/AuthContext";
 
 export default function Checkout() {
   const { cartItems } = useCart();
+  const { currentUser } = useContext(AuthContext);
+
+  // State for form inputs
+  const [formData, setFormData] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    mobile: "",
+    street: "",
+    city: "",
+    postalCode: "",
+    country: "",
+    paymentMethod: "",
+  });
+
+  // State for validation errors
+  const [errors, setErrors] = useState({});
 
   // Calculate total price
   const total = cartItems.reduce(
     (acc, item) => acc + item.price * item.quantity,
     0
   );
+
+  // Input Change Handler
+  const handleInputChange = (e) => {
+    setFormData({ ...formData, [e.target.id]: e.target.value });
+  };
+
+  // Validate Input Fields
+  const validateForm = () => {
+    let errors = {};
+    if (!formData.firstName.trim()) errors.firstName = "First name is required";
+    if (!formData.lastName.trim()) errors.lastName = "Last name is required";
+    if (!formData.street.trim()) errors.street = "Street address is required";
+    if (!formData.city.trim()) errors.city = "City is required";
+    if (!formData.postalCode.trim())
+      errors.postalCode = "Postal Code is required";
+    if (!formData.country.trim()) errors.country = "Country is required";
+    if (!formData.mobile.trim()) errors.mobile = "Mobile number is required";
+
+    // Validate Email Format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (formData.email && !emailRegex.test(formData.email)) {
+      errors.email = "Invalid email format";
+    }
+
+    // Validate Mobile Number (supports international format)
+    const mobileRegex = /^\+?[1-9]\d{1,14}$/;
+    if (!mobileRegex.test(formData.mobile)) {
+      errors.mobile = "Invalid mobile number";
+    }
+
+    // Validate Payment Selection
+    if (!formData.paymentMethod)
+      errors.paymentMethod = "Select a payment method";
+
+    setErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+
+  // Checkout Handler
   const handleCheckout = async () => {
+    // if (!validateForm()) return;
+
+    if (currentUser == null) {
+      alert("Please sign in to place an order.");
+      return;
+    }
+
+    const addressString = `${formData.street}, ${formData.city}, ${formData.postalCode}, ${formData.country}`;
+    console.log("📍 Sending Address to Backend:", addressString); // ✅ Debugging
+
     try {
       const response = await fetch("http://localhost:5001/api/checkout", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ cartItems, total }),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          cartItems,
+          total,
+          address: {
+            street: formData.street,
+            city: formData.city,
+            postalCode: formData.postalCode,
+            country: formData.country,
+          },
+          mobile: formData.mobile,
+        }),
       });
 
       const data = await response.json();
+      console.log("🔹 Backend Response:", data); // ✅ Debugging
+
       if (response.ok) {
-        alert("Order placed successfully!");
+        alert(
+          "Order placed successfully!\nValidated Address: " +
+            data.validatedAddress.formattedAddress
+        );
       } else {
         alert("Error placing order: " + data.message);
       }
@@ -35,70 +114,9 @@ export default function Checkout() {
   return (
     <div className="container" id="Checkout">
       <div className="row">
-        {/* Cart Summary Section */}
-        <div className="col-md-4 order-md-2 mb-4">
-          <h4 className="d-flex justify-content-between align-items-center mb-3">
-            <span className="text-muted">Your cart</span>
-            <span className="badge badge-secondary badge-pill">
-              {cartItems.length}
-            </span>
-          </h4>
-
-          {/* Cart Items List */}
-          <ul className="list-group mb-3">
-            {cartItems.length === 0 ? (
-              <li className="list-group-item text-muted">
-                Your cart is empty.
-              </li>
-            ) : (
-              cartItems.map((item) => (
-                <li
-                  key={item.id}
-                  className="list-group-item d-flex justify-content-between lh-condensed"
-                >
-                  <div>
-                    <h6 className="my-0">
-                      {item.name} (x{item.quantity})
-                    </h6>
-                    <small className="text-muted">
-                      {item.description || ""}
-                    </small>
-                  </div>
-                  <span className="text-muted">
-                    ${(item.price * item.quantity).toFixed(2)}
-                  </span>
-                </li>
-              ))
-            )}
-
-            {/* Total Price Section */}
-            <li className="list-group-item d-flex justify-content-between">
-              <span>Total (USD)</span>
-              <strong>${total.toFixed(2)}</strong>
-            </li>
-          </ul>
-
-          {/* Promo Code Section */}
-          <form className="card p-2">
-            <div className="input-group">
-              <input
-                type="text"
-                className="form-control"
-                placeholder="Promo code"
-              />
-              <div className="input-group-append">
-                <button type="submit" className="btn btn-secondary">
-                  Redeem
-                </button>
-              </div>
-            </div>
-          </form>
-        </div>
-
-        {/* Billing Address Section */}
         <div className="col-md-8 order-md-1">
-          <h4 className="mb-3">Billing address</h4>
-          <form className="needs-validation" noValidate>
+          <h4 className="mb-3">Billing Address</h4>
+          <form noValidate>
             <div className="row">
               <div className="col-md-6 mb-3">
                 <label htmlFor="firstName">First name</label>
@@ -106,89 +124,98 @@ export default function Checkout() {
                   type="text"
                   className="form-control"
                   id="firstName"
-                  required
+                  value={formData.firstName}
+                  onChange={handleInputChange}
                 />
-                <div className="invalid-feedback">
-                  Valid first name is required.
-                </div>
+                {errors.firstName && (
+                  <small className="text-danger">{errors.firstName}</small>
+                )}
               </div>
+
               <div className="col-md-6 mb-3">
                 <label htmlFor="lastName">Last name</label>
                 <input
                   type="text"
                   className="form-control"
                   id="lastName"
-                  required
+                  value={formData.lastName}
+                  onChange={handleInputChange}
                 />
-                <div className="invalid-feedback">
-                  Valid last name is required.
-                </div>
+                {errors.lastName && (
+                  <small className="text-danger">{errors.lastName}</small>
+                )}
               </div>
             </div>
 
             <div className="mb-3">
-              <label htmlFor="email">
-                Email <span className="text-muted">(Optional)</span>
-              </label>
-              <input
-                type="email"
-                className="form-control"
-                id="email"
-                placeholder="you@example.com"
-              />
-            </div>
-
-            <div className="mb-3">
-              <label htmlFor="address">Address</label>
+              <label htmlFor="mobile">Mobile Number</label>
               <input
                 type="text"
                 className="form-control"
-                id="address"
-                required
+                id="mobile"
+                value={formData.mobile}
+                onChange={handleInputChange}
               />
-              <div className="invalid-feedback">
-                Please enter your shipping address.
-              </div>
+              {errors.mobile && (
+                <small className="text-danger">{errors.mobile}</small>
+              )}
             </div>
 
-            {/* Payment Section */}
-            <h4 className="mb-3 mt-3">Payment</h4>
-            <div className="d-block my-3">
-              <div className="custom-control custom-radio">
+            <div className="mb-3">
+              <label htmlFor="street">Street Address</label>
+              <input
+                type="text"
+                className="form-control"
+                id="street"
+                value={formData.street}
+                onChange={handleInputChange}
+              />
+              {errors.street && (
+                <small className="text-danger">{errors.street}</small>
+              )}
+            </div>
+
+            <div className="row">
+              <div className="col-md-4 mb-3">
+                <label htmlFor="city">City</label>
                 <input
-                  id="credit"
-                  name="paymentMethod"
-                  type="radio"
-                  className="custom-control-input"
-                  required
+                  type="text"
+                  className="form-control"
+                  id="city"
+                  value={formData.city}
+                  onChange={handleInputChange}
                 />
-                <label className="custom-control-label" htmlFor="credit">
-                  Credit card
-                </label>
+                {errors.city && (
+                  <small className="text-danger">{errors.city}</small>
+                )}
               </div>
-              <div className="custom-control custom-radio">
+
+              <div className="col-md-4 mb-3">
+                <label htmlFor="postalCode">Postal Code</label>
                 <input
-                  id="debit"
-                  name="paymentMethod"
-                  type="radio"
-                  className="custom-control-input"
-                  required
+                  type="text"
+                  className="form-control"
+                  id="postalCode"
+                  value={formData.postalCode}
+                  onChange={handleInputChange}
                 />
-                <label className="custom-control-label" htmlFor="debit">
-                  Debit card
-                </label>
+                {errors.postalCode && (
+                  <small className="text-danger">{errors.postalCode}</small>
+                )}
               </div>
-              <div className="custom-control custom-radio">
+
+              <div className="col-md-4 mb-3">
+                <label htmlFor="country">Country</label>
                 <input
-                  id="paypal"
-                  name="paymentMethod"
-                  type="radio"
-                  className="custom-control-input"
-                  required
+                  type="text"
+                  className="form-control"
+                  id="country"
+                  value={formData.country}
+                  onChange={handleInputChange}
                 />
-                <label className="custom-control-label" htmlFor="paypal">
-                  PayPal
-                </label>
+                {errors.country && (
+                  <small className="text-danger">{errors.country}</small>
+                )}
               </div>
             </div>
 
@@ -202,21 +229,6 @@ export default function Checkout() {
           </form>
         </div>
       </div>
-
-      <footer className="my-5 pt-5 text-muted text-center text-small">
-        <p className="mb-1">© 2025 Company Name</p>
-        <ul className="list-inline">
-          <li className="list-inline-item">
-            <a href="#">Privacy</a>
-          </li>
-          <li className="list-inline-item">
-            <a href="#">Terms</a>
-          </li>
-          <li className="list-inline-item">
-            <a href="#">Support</a>
-          </li>
-        </ul>
-      </footer>
     </div>
   );
 }
