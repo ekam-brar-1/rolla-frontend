@@ -4,39 +4,105 @@
     "name": "Vintage Denim Jacket",
     "price": 79.99,
     "category": "Clothing",
-    "image": "https://m.media-amazon.com/images/I/61k5qx9dsxL._AC_UF456,576_SR456,576_.jpg",
+    "image": "https://m.media-amazon.com/images/I/71tGb3UvupL._AC._SR360,460.jpg",
     "description": "A stylish vintage denim jacket perfect for any casual outfit."
   },
   {
     "id": 2,
-    "name": "Leather Handbag",
-    "price": 149.99,
-    "category": "Accessories",
-    "image": "https://m.media-amazon.com/images/I/61NwgA3OgfL._AC_SX385_.jpg",
-    "description": "A premium leather handbag that adds a touch of elegance to your look."
-  },
-  {
-    "id": 3,
-    "name": "Running Sneakers",
-    "price": 89.99,
-    "category": "Footwear",
-    "image": "https://images-na.ssl-images-amazon.com/images/I/81rHcvd-57L._AC_UL232_SR232,232_.jpg",
-    "description": "Comfortable and stylish running sneakers for your daily workouts."
-  },
-  {
-    "id": 4,
     "name": "Graphic T-Shirt",
     "price": 29.99,
     "category": "Clothing",
-    "image": "https://m.media-amazon.com/images/I/71rk8JqZZTL._AC_UF456,576_SR456,576_.jpg",
+    "image": "https://m.media-amazon.com/images/I/71kH+vzvPIL._AC_SX679_.jpg",
     "description": "A trendy graphic t-shirt that makes a bold statement."
   },
   {
-    "id": 5,
-    "name": "Sunglasses",
-    "price": 19.99,
-    "category": "Accessories",
-    "image": "https://m.media-amazon.com/images/I/61vNP+rSAPL._AC_UF456,576_SR456,576_.jpg",
-    "description": "Stylish sunglasses to protect your eyes and enhance your look."
+    "id": 3,
+    "name": "Slim Fit Jeans",
+    "price": 49.99,
+    "category": "Clothing",
+    "image": "https://m.media-amazon.com/images/I/71cgfd9OmtL._AC_SX342_.jpg",
+    "description": "Classic slim fit jeans that go with everything."
+  },
+  {
+    "id": 4,
+    "name": "Hooded Sweatshirt",
+    "price": 59.99,
+    "category": "Clothing",
+    "image": "https://images.pexels.com/photos/1040945/pexels-photo-1040945.jpeg",
+    "description": "A comfortable hoodie perfect for chilly days."
+  },
+
+  {
+    "id": 6,
+    "name": "Winter Puffer Jacket",
+    "price": 99.99,
+    "category": "Clothing",
+    "image": "https://amagear.com/wp-content/uploads/2023/09/AMA_100_Years.png",
+    "description": "A warm and stylish puffer jacket for winter."
+  },
+  {
+    "id": 7,
+    "name": "Plaid Flannel Shirt",
+    "price": 39.99,
+    "category": "Clothing",
+    "image": "https://www.a09store.com/cdn/shop/files/3AMA-2Oversized.jpg?v=1697817589&width=1946",
+    "description": "Soft and cozy plaid flannel shirt for layering."
+  },
+  {
+    "id": 8,
+    "name": "Classic Polo Shirt",
+    "price": 34.99,
+    "category": "Clothing",
+    "image": "https://images.pexels.com/photos/179909/pexels-photo-179909.jpeg",
+    "description": "A breathable and stylish polo shirt for casual wear."
+  },
+  {
+    "id": 9,
+    "name": "Athletic Joggers",
+    "price": 44.99,
+    "category": "Clothing",
+    "image": "https://m.media-amazon.com/images/I/716yhzuHtsL._AC_UF480,600_SR480,600_.jpg",
+    "description": "Comfortable joggers perfect for workouts or lounging."
+  },
+  {
+    "id": 10,
+    "name": "Leather Biker Jacket",
+    "price": 129.99,
+    "category": "Clothing",
+    "image": "https://amagear.com/wp-content/uploads/2022/02/AMA_Standard_Tee.png",
+    "description": "A bold leather biker jacket for a classic look."
+  },
+
+  {
+    "id": 12,
+    "name": "Wool Overcoat",
+    "price": 149.99,
+    "category": "Clothing",
+    "image": "https://m.media-amazon.com/images/I/711PqgQc5YL._AC_UF480,600_SR480,600_.jpg",
+    "description": "A sophisticated wool overcoat for colder months."
+  },
+  {
+    "id": 13,
+    "name": "Cotton Crewneck Sweater",
+    "price": 54.99,
+    "category": "Clothing",
+    "image": "https://m.media-amazon.com/images/I/71EHiaDqb1L.jpg",
+    "description": "A classic cotton sweater for versatile styling."
+  },
+  {
+    "id": 14,
+    "name": "Performance Gym Shorts",
+    "price": 24.99,
+    "category": "Clothing",
+    "image": "https://cdn11.bigcommerce.com/s-qnxt3/images/stencil/original/products/378/1266/ama-mens-t-on-black__68893.1523546670.jpg",
+    "description": "Lightweight and breathable gym shorts."
+  },
+  {
+    "id": 15,
+    "name": "Formal Dress Shirt",
+    "price": 47.99,
+    "category": "Clothing",
+    "image": "https://cdn.shopify.com/s/files/1/0051/7042/files/Human-Made-Graphic-S-S-T-Shirt-_8-Black-1.jpg?v=1738193716&width=2000&height=2501&crop=center",
+    "description": "A sleek dress shirt for business and formal occasions."
   }
 ]

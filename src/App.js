@@ -1,21 +1,20 @@
 import React, { useState } from "react";
-import Header from "./Header";
-import ShirtPreview from "./ShirtPreview";
-import Controls from "./Controls";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap/dist/js/bootstrap.bundle.min";
+
 import "./App.css";
 import { AuthProvider } from "./context/AuthContext";
 import Checkout from "./Checkout";
-import ShoppingItem from "./shoppingItem";
+
 import Customize from "./customize";
 import TrendyDesigns from "./trendyDesign";
-
+import Success from "./components/Success";
+import Canceled from "./components/Canceled";
 import { Route, Routes } from "react-router-dom";
 import AboutUs from "./aboutus";
-import GoogleLoginButton from "./GoogleLoginButton";
-import SomeComponent from "./someComponent";
+
 import { CartProvider } from "./context/CartContext";
 import Cart from "./components/Cart";
-//aimport UploadDesign from './components/UploadDesign';
 
 function App() {
   return (
@@ -27,6 +26,10 @@ function App() {
             <Route path="/trendyDesign" element={<TrendyDesigns />} />
             <Route path="/aboutus" element={<AboutUs />} />
             <Route path="/" element={<TrendyDesigns />} />
+            <Route path="/checkout" element={<Checkout />} />
+
+            <Route path="/success" element={<Success />} />
+            <Route path="/canceled" element={<Canceled />} />
           </Routes>
           <Cart />
         </div>

@@ -19,7 +19,7 @@ const Cart = () => {
     <div className="container mt-4">
       {/* Cart Toggle Button */}
       <button
-        className="btn btn-danger d-flex align-items-center justify-content-between w-100"
+        className="btn btn-danger d-flex align-items-center justify-content-between w-100 m-2"
         onClick={() => setIsOpen(!isOpen)}
       >
         <FaShoppingCart size={24} className="me-2" />
@@ -37,10 +37,10 @@ const Cart = () => {
               {cartItems.map((item) => (
                 <li
                   key={item.id}
-                  className="list-group-item d-flex justify-content-between align-items-center"
+                  className="list-group-item d-flex flex-wrap justify-content-between align-items-center"
                 >
-                  <div>
-                    <strong>{item.name}</strong>
+                  <div className="d-flex align-items-center flex-wrap">
+                    <strong className="me-2">{item.name}</strong>
                     {item.image && (
                       <img
                         src={item.image}
@@ -56,7 +56,7 @@ const Cart = () => {
                   </div>
 
                   {/* Quantity Controls */}
-                  <div className="d-flex align-items-center">
+                  <div className="d-flex align-items-center flex-wrap mt-2 mt-md-0">
                     <button
                       className="btn btn-sm btn-outline-secondary"
                       onClick={() => decreaseQuantity(item.id)}
@@ -75,7 +75,7 @@ const Cart = () => {
 
                   {/* Remove Button */}
                   <button
-                    className="btn btn-sm btn-danger"
+                    className="btn btn-sm btn-danger mt-2 mt-md-0"
                     onClick={() => removeFromCart(item.id)}
                   >
                     Remove
@@ -100,10 +100,12 @@ const Cart = () => {
             <button
               type="button"
               onClick={() => setCheckout(!checkout)}
-              className="btn btn-primary btn-lg btn-block"
+              className="btn btn-primary btn-lg w-100"
             >
-              Checkout
+              {checkout ? "Hide Checkout" : "Proceed to Checkout"}
             </button>
+
+            {/* ✅ Correctly render Checkout component outside the button */}
             {checkout && <Checkout />}
           </div>
         </div>

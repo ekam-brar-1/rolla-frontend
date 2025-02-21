@@ -1,12 +1,12 @@
 import React, { useState, useContext } from "react";
 import { useCart } from "./context/CartContext";
 import { AuthContext } from "./context/AuthContext";
+import { checkActionCode } from "firebase/auth";
 
 export default function Checkout() {
   const { cartItems } = useCart();
   const { currentUser } = useContext(AuthContext);
 
-  // State for form inputs
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -19,106 +19,130 @@ export default function Checkout() {
     paymentMethod: "",
   });
 
-  // State for validation errors
   const [errors, setErrors] = useState({});
 
-  // Calculate total price
   const total = cartItems.reduce(
-    (acc, item) => acc + item.price * item.quantity,
+    (acc, item) => acc + item.price * (item.quantity || 1),
     0
   );
 
-  // Input Change Handler
   const handleInputChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
   };
 
-  // Validate Input Fields
   const validateForm = () => {
-    let errors = {};
-    if (!formData.firstName.trim()) errors.firstName = "First name is required";
-    if (!formData.lastName.trim()) errors.lastName = "Last name is required";
-    if (!formData.street.trim()) errors.street = "Street address is required";
-    if (!formData.city.trim()) errors.city = "City is required";
+    let newErrors = {};
+    if (!formData.firstName.trim())
+      newErrors.firstName = "First name is required";
+    if (!formData.lastName.trim()) newErrors.lastName = "Last name is required";
+    if (!formData.mobile.trim()) newErrors.mobile = "Mobile number is required";
+    if (!formData.street.trim())
+      newErrors.street = "Street address is required";
+    if (!formData.city.trim()) newErrors.city = "City is required";
     if (!formData.postalCode.trim())
-      errors.postalCode = "Postal Code is required";
-    if (!formData.country.trim()) errors.country = "Country is required";
-    if (!formData.mobile.trim()) errors.mobile = "Mobile number is required";
+      newErrors.postalCode = "Postal code is required";
+    if (!formData.country.trim()) newErrors.country = "Country is required";
 
-    // Validate Email Format
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (formData.email && !emailRegex.test(formData.email)) {
-      errors.email = "Invalid email format";
-    }
-
-    // Validate Mobile Number (supports international format)
-    const mobileRegex = /^\+?[1-9]\d{1,14}$/;
-    if (!mobileRegex.test(formData.mobile)) {
-      errors.mobile = "Invalid mobile number";
-    }
-
-    // Validate Payment Selection
-    if (!formData.paymentMethod)
-      errors.paymentMethod = "Select a payment method";
-
-    setErrors(errors);
-    return Object.keys(errors).length === 0;
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
   };
 
-  // Checkout Handler
   const handleCheckout = async () => {
-    // if (!validateForm()) return;
-
-    if (currentUser == null) {
-      alert("Please sign in to place an order.");
-      return;
+    if (!currentUser) {
+      alert("You must be signed in before placing an order.");
+      throw new Error("User not signed in"); // ✅ Stops execution
     }
 
-    const addressString = `${formData.street}, ${formData.city}, ${formData.postalCode}, ${formData.country}`;
-    console.log("📍 Sending Address to Backend:", addressString); // ✅ Debugging
+    if (!validateForm()) {
+      return false; // ✅ Stops checkout if form validation fails
+    }
+
+    const orderData = {
+      cartItems: cartItems.map((item) => ({
+        name: item.name,
+        price: item.price,
+        quantity: item.quantity || 1,
+        size: item.size || "N/A",
+        frontImage: item.frontDesign?.imageUrl || "",
+        backImage: item.backDesign?.imageUrl2 || "",
+      })),
+      total,
+      address: {
+        street: formData.street,
+        city: formData.city,
+        postalCode: formData.postalCode,
+        country: formData.country,
+      },
+      mobile: formData.mobile,
+    };
 
     try {
       const response = await fetch("http://localhost:5001/api/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          cartItems,
-          total,
-          address: {
-            street: formData.street,
-            city: formData.city,
-            postalCode: formData.postalCode,
-            country: formData.country,
-          },
-          mobile: formData.mobile,
-        }),
+        body: JSON.stringify(orderData),
       });
 
       const data = await response.json();
-      console.log("🔹 Backend Response:", data); // ✅ Debugging
 
-      if (response.ok) {
-        alert(
-          "Order placed successfully!\nValidated Address: " +
-            data.validatedAddress.formattedAddress
-        );
-      } else {
+      if (!response.ok) {
         alert("Error placing order: " + data.message);
+        return false;
       }
+
+      alert(
+        `Order placed successfully!\nValidated Address: ${data.validatedAddress.formattedAddress}`
+      );
+      return true; // ✅ Indicates success
     } catch (error) {
       console.error("Checkout error:", error);
       alert("An error occurred during checkout.");
+      return false;
+    }
+  };
+
+  const handleCheckout2 = async () => {
+    const sanitizedCartItems = cartItems.map((item) => ({
+      name: item.name,
+      price: item.price,
+      quantity: item.quantity || 1,
+      size: item.size || "N/A",
+    }));
+
+    const response = await fetch(
+      "http://localhost:5001/api/create-checkout-session",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ cartItems: sanitizedCartItems }),
+      }
+    );
+
+    const session = await response.json();
+    window.location.href = session.url;
+  };
+
+  const handleCheckoutProcess = async () => {
+    try {
+      const checkoutSuccess = await handleCheckout();
+      console.log(checkActionCode); // ✅ Waits for `handleCheckout`
+      if (checkoutSuccess) {
+        await handleCheckout2(); // ✅ Runs only if `handleCheckout` succeeds
+      }
+    } catch (error) {
+      console.error("Error during checkout:", error);
+      alert("Checkout failed. Please try again.");
     }
   };
 
   return (
-    <div className="container" id="Checkout">
-      <div className="row">
-        <div className="col-md-8 order-md-1">
-          <h4 className="mb-3">Billing Address</h4>
+    <div className="container py-5" id="Checkout">
+      <div className="row justify-content-center">
+        <div className="col-12 col-md-10 col-lg-8">
+          <h4 className="mb-4 text-center">Delivery Address</h4>
           <form noValidate>
             <div className="row">
-              <div className="col-md-6 mb-3">
+              <div className="col-12 col-md-6 mb-3">
                 <label htmlFor="firstName">First name</label>
                 <input
                   type="text"
@@ -132,7 +156,7 @@ export default function Checkout() {
                 )}
               </div>
 
-              <div className="col-md-6 mb-3">
+              <div className="col-12 col-md-6 mb-3">
                 <label htmlFor="lastName">Last name</label>
                 <input
                   type="text"
@@ -176,7 +200,7 @@ export default function Checkout() {
             </div>
 
             <div className="row">
-              <div className="col-md-4 mb-3">
+              <div className="col-12 col-md-4 mb-3">
                 <label htmlFor="city">City</label>
                 <input
                   type="text"
@@ -190,7 +214,7 @@ export default function Checkout() {
                 )}
               </div>
 
-              <div className="col-md-4 mb-3">
+              <div className="col-12 col-md-4 mb-3">
                 <label htmlFor="postalCode">Postal Code</label>
                 <input
                   type="text"
@@ -204,7 +228,7 @@ export default function Checkout() {
                 )}
               </div>
 
-              <div className="col-md-4 mb-3">
+              <div className="col-12 col-md-4 mb-3">
                 <label htmlFor="country">Country</label>
                 <input
                   type="text"
@@ -219,13 +243,15 @@ export default function Checkout() {
               </div>
             </div>
 
-            <button
-              className="btn btn-primary btn-lg btn-block"
-              type="button"
-              onClick={handleCheckout}
-            >
-              Continue to checkout
-            </button>
+            <div className="d-flex flex-column flex-md-row justify-content-center mt-4">
+              <button
+                className="btn btn-primary btn-lg w-100 w-md-auto"
+                type="button"
+                onClick={handleCheckoutProcess}
+              >
+                Continue to Checkout
+              </button>
+            </div>
           </form>
         </div>
       </div>

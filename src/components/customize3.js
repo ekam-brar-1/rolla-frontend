@@ -132,7 +132,7 @@ export default function CustomizeShirt() {
 
     try {
       const response = await axios.post(
-        "http://localhost:5001/api/orders",
+        "http://localhost:5001/api/upload",
         formData,
         {
           headers: { "Content-Type": "multipart/form-data" },
@@ -189,7 +189,7 @@ export default function CustomizeShirt() {
         <div className="text-center">
           <h2>Select a Color</h2>
           <div className="d-flex flex-wrap justify-content-center mt-3">
-            {["#ffffff", "#000000", "#FF5733", "#33FF57", "#3357FF"].map(
+            {["#FFFFFF", "#000000", "#FF5733", "#33FF57", "#3357FF"].map(
               (color) => (
                 <button
                   key={color}
@@ -200,7 +200,7 @@ export default function CustomizeShirt() {
                     margin: 5,
                   }}
                   onClick={() => setShirtColor(color)}
-                  className={`btn ${
+                  className={`btn border border-dark ${
                     shirtColor === color ? "border border-dark" : ""
                   }`}
                 />
@@ -220,11 +220,11 @@ export default function CustomizeShirt() {
       {step === 2 && (
         <div className="text-center">
           <h2>Select a Size</h2>
-          <div className="d-flex flex-wrap justify-content-center mt-3">
+          <div className="d-flex flex-wrap justify-content-center mt-3 ">
             {["XS", "S", "M", "L", "XL", "XXL"].map((size) => (
               <button
                 key={size}
-                className={`btn btn-outline-primary mx-2 ${
+                className={`btn btn-outline-primary mx-2  ${
                   shirtSize === size ? "active" : ""
                 }`}
                 onClick={() => setShirtSize(size)}
