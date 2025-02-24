@@ -2,7 +2,7 @@
 import { initializeApp } from "firebase/app";
 import { getAuth, GoogleAuthProvider } from "firebase/auth";
 
-// Function to fetch Firebase config from backend
+// Firebase Config from Environment Variables
 const fetchFirebaseConfig = async () => {
   try {
     const response = await fetch(
@@ -16,19 +16,9 @@ const fetchFirebaseConfig = async () => {
   }
 };
 
-// Initialize Firebase asynchronously
-const initializeFirebase = async () => {
-  const firebaseConfig = await fetchFirebaseConfig();
-  if (firebaseConfig) {
-    const app = initializeApp(firebaseConfig);
-    return {
-      auth: getAuth(app),
-      googleProvider: new GoogleAuthProvider(),
-    };
-  }
-  return null;
-};
+// Initialize Firebase
+const app = initializeApp(fetchFirebaseConfig);
 
-// Export Firebase Auth & Provider when ready
-const firebaseServices = initializeFirebase();
-export default firebaseServices;
+// Auth and Provider
+export const auth = getAuth(app);
+export const googleProvider = new GoogleAuthProvider();
