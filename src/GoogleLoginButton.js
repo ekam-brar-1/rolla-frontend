@@ -1,8 +1,8 @@
 // src/components/GoogleLoginButton.js
 import React, { useContext } from "react";
 import { signInWithPopup, signOut } from "firebase/auth";
-import { auth, googleProvider } from "../firebase"; // Adjust the path if needed
-import { AuthContext } from "../context/AuthContext";
+import { auth, googleProvider } from "./firebase"; // Adjust the path if needed
+import { AuthContext } from "./context/AuthContext";
 
 // Function to detect if the user is in an in-app browser (LinkedIn, Facebook, Instagram)
 const isInAppBrowser = () => {
