@@ -2,23 +2,28 @@
 import { initializeApp } from "firebase/app";
 import { getAuth, GoogleAuthProvider } from "firebase/auth";
 
-// Firebase Config from Environment Variables
-
+// Function to fetch Firebase config from backend synchronously
 const fetchFirebaseConfig = async () => {
   try {
-    const response = await fetch("http://localhost:5000/api/config"); // Replace with your deployed backend URL
-    const config = await response.json();
-    return config;
+    const response = await fetch(
+      "https://rolla-backend.onrender.com/api/config"
+    ); // Replace with your deployed backend URL
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+    return await response.json();
   } catch (error) {
     console.error("Error fetching Firebase config:", error);
-    return null;
+    return {};
   }
 };
 
-const firebaseConfig = fetchFirebaseConfig();
-// Initialize Firebase
+// Synchronously fetch the config before initializing Firebase
+const firebaseConfig = await fetchFirebaseConfig();
+
+// Initialize Firebase (Unchanged)
 const app = initializeApp(firebaseConfig);
 
-// Auth and Provider
+// Auth and Provider (Unchanged)
 export const auth = getAuth(app);
 export const googleProvider = new GoogleAuthProvider();
