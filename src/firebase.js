@@ -7,14 +7,16 @@ const fetchFirebaseConfig = async () => {
   try {
     const response = await fetch(
       "https://rolla-backend.onrender.com/api/config"
-    ); // Replace with your deployed backend URL
+    ); // Use deployed backend URL
     if (!response.ok) {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
-    return await response.json();
+    const config = await response.json();
+    console.log("Firebase Config:", config); // Debugging
+    return config;
   } catch (error) {
     console.error("Error fetching Firebase config:", error);
-    return {};
+    return null;
   }
 };
 
