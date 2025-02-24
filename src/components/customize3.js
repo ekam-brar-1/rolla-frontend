@@ -132,7 +132,7 @@ export default function CustomizeShirt() {
 
     try {
       const response = await axios.post(
-        "http://localhost:5001/api/upload",
+        "https://rolla-backend.onrender.com/api/upload",
         formData,
         {
           headers: { "Content-Type": "multipart/form-data" },

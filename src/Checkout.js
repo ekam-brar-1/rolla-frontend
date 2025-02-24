@@ -77,11 +77,14 @@ export default function Checkout() {
     };
 
     try {
-      const response = await fetch("http://localhost:5001/api/checkout", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(orderData),
-      });
+      const response = await fetch(
+        "https://rolla-backend.onrender.com/api/checkout",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(orderData),
+        }
+      );
 
       const data = await response.json();
 
@@ -110,7 +113,7 @@ export default function Checkout() {
     }));
 
     const response = await fetch(
-      "http://localhost:5001/api/create-checkout-session",
+      "https://rolla-backend.onrender.com/api/create-checkout-session",
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
