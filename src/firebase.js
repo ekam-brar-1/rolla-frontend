@@ -15,7 +15,7 @@ const fetchFirebaseConfig = async () => {
   }
 };
 
-const firebaseConfig = await fetchFirebaseConfig();
+const firebaseConfig = fetchFirebaseConfig();
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 
