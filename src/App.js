@@ -25,7 +25,7 @@ function App() {
             <Route path="/customize" element={<Customize />} />
             <Route path="/trendyDesign" element={<TrendyDesigns />} />
             <Route path="/aboutus" element={<AboutUs />} />
-            <Route path="/" element={<TrendyDesigns />} />
+            <Route path="/" element={<Customize />} />
             <Route path="/checkout" element={<Checkout />} />
 
             <Route path="/success" element={<Success />} />
